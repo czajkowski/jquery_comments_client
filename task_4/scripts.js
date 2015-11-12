@@ -5,7 +5,7 @@ $(function () {
         $commentList = $("#comment-list"),
         $refreshButton = $("#refresh-button"),
         username = "piotr";
-        
+
     function renderComment (author, body) {
         $commentList.prepend(
             "<div class='comment row'>"
@@ -21,16 +21,16 @@ $(function () {
             body: $bodyInput.val()
         };
     }
-    
+
     function clearForm () {
         $autorInput.val("");
         $bodyInput.val("");
     }
-    
+
     function clearList () {
-        $commentList.html("");   
+        $commentList.html("");
     }
-    
+
     function getCommentsFromServer(callback) {
         $.ajax({
            url : "https://commen-server-czajkowski.c9users.io/comments/" + username,
@@ -39,7 +39,7 @@ $(function () {
            success: callback
         });
     }
-    
+
     function sendNewCommentToServer(author, body, callback) {
         $.ajax({
            url : "https://commen-server-czajkowski.c9users.io/comments/" + username,
@@ -52,38 +52,38 @@ $(function () {
            success: callback
         });
     }
-    
+
     function loadCommentList(){
         getCommentsFromServer(function (comments) {
             clearList();
-    
+
             comments.forEach(function (comment) {
-                  renderComment(comment.author, comment.body);          
+                  renderComment(comment.author, comment.body);
             });
         });
     }
-    
+
     $commentForm.submit(function (e) {
-        e.preventDefault();    
-        
+        e.preventDefault();
+
         var formData = getDataFromForm();
-        
+
         clearForm();
-        
+
         sendNewCommentToServer(formData.author, formData.body, function () {
             console.log("Comment saved!");
         });
-        
+
         renderComment(formData.author, formData.body);
     });
-    
-    
+
+
     $refreshButton.click(function (e) {
         e.preventDefault();
-        
+
         loadCommentList();
     });
-    
+
     // Start with loading comments
     loadCommentList();
 });
